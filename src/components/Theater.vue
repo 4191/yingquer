@@ -20,6 +20,7 @@
 
 <script scoped>
 import Vue from 'vue'
+import jsonp from 'jsonp'
 export default {
   name: 'Theaters',
   data(){
@@ -28,30 +29,46 @@ export default {
     }
   },
   created(){
-    var url = "../../static/in_theaters.json"
-    Vue.axios.get(url).then((res) => {
-      //console.log(res.data.subjects)
-      return res.data.subjects
-    }).then((data)=>{
-      var newData = Array.prototype.slice.call(data);
-      var limitarr = []
-      for(var i=9, len=17;i<len; i++){
-        limitarr.push(newData[i]);
-      }
-      this.arr = limitarr
-      //console.log(this.arr)
-    }).then(()=>{
-      var mySwiper = new Swiper('.swiper-container',{
-        slidesPerView : 3,
-        spaceBetween : 10
-      })
-    })
-    //  setTimeout(function () {
+    //var url = "../../static/in_theaters.json"
+    var url = "https://api.douban.com/v2/movie/in_theaters"
+    // Vue.axios.get(url).then((res) => {
+    //   //console.log(res.data.subjects)
+    //   return res.data.subjects
+    // }).then((data)=>{
+    //   var newData = Array.prototype.slice.call(data);
+    //   var limitarr = []
+    //   for(var i=9, len=17;i<len; i++){
+    //     limitarr.push(newData[i]);
+    //   }
+    //   this.arr = limitarr
+    //   //console.log(this.arr)
+    // }).then(()=>{
     //   var mySwiper = new Swiper('.swiper-container',{
     //     slidesPerView : 3,
     //     spaceBetween : 10
     //   })
-    // },0)
+    // })
+    jsonp(url,null,(err,data)=>{
+      if(err){
+        console.error(err.message);
+      }else{
+       //console.log(data.subjects)
+       var data = data.subjects;
+       var newData = Array.prototype.slice.call(data);
+        var limitarr = []
+        for(var i=9, len=17;i<len; i++){
+          limitarr.push(newData[i]);
+        }
+        this.arr = limitarr
+        //console.log(this.arr)
+        setTimeout(()=>{
+          var mySwiper = new Swiper('.swiper-container',{
+            slidesPerView : 3,
+            spaceBetween : 10
+          })
+        },100)
+      }
+    })
   }
 }
  

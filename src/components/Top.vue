@@ -37,42 +37,45 @@ export default {
      //    }) 
     // 和config/index.js 配合解决跨域问题（不推荐，特别不安全且low，建议用后台cros解决跨域）
     // var url = "/v2/movie/top250";
-    var url = "../../static/top250.json"
-    Vue.axios.get(url).then((res) => {
-      //console.log(res.data.subjects)
-      return res.data.subjects
-    }).then((data)=>{
-      var newData = Array.prototype.slice.call(data);
-      var limitarr = []
-      for(var i=0, len=8;i<len; i++){
-        limitarr.push(newData[i]);
-      }
-      this.arr = limitarr
-     // console.log(this.arr)
-    }).then(()=>{ 
-      var mySwiper = new Swiper('.swiper-container',{
-        slidesPerView : 3,
-        spaceBetween : 10,
-      })
-    })
-
-    // 跨域写法
-    // var url = "https://api.douban.com/v2/movie/top250"
-    // new Promise((resolve, reject)=> {
-    //   jsonp(url,null,(err,data)=>{
-    //     if(err){
-    //       console.error(err.message);
-    //     }else{
-    //       // console.log(data.subjects);
-    //       this.arr = data.subjects;
-    //     }
-    //   })
-    // }).then(()=>{
+    //var url = "../../static/top250.json"
+    var url = "https://api.douban.com/v2/movie/top250"
+    // Vue.axios.get(url).then((res) => {
+    //   //console.log(res.data.subjects)
+    //   return res.data.subjects
+    // }).then((data)=>{
+    //   var newData = Array.prototype.slice.call(data);
+    //   var limitarr = []
+    //   for(var i=0, len=8;i<len; i++){
+    //     limitarr.push(newData[i]);
+    //   }
+    //   this.arr = limitarr
+    //  // console.log(this.arr)
+    // }).then(()=>{ 
     //   var mySwiper = new Swiper('.swiper-container',{
     //     slidesPerView : 3,
     //     spaceBetween : 10,
     //   })
     // })
+
+    // 跨域写法
+    var url = "https://api.douban.com/v2/movie/top250"
+    jsonp(url,null,(err,data)=>{
+      if(err){
+        console.error(err.message);
+      }else{
+       //console.log(data.subjects)
+       var data = data.subjects;
+       var newData = Array.prototype.slice.call(data);
+        this.arr = newData
+        //console.log(this.arr)
+        setTimeout(()=>{
+          var mySwiper = new Swiper('.swiper-container',{
+            slidesPerView : 3,
+            spaceBetween : 10
+          })
+        },100)
+      }
+    })
   }
 }
 

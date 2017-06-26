@@ -6,7 +6,7 @@
   </div>
   <ul>
     <li v-for="item in arrusbox">
-      <router-link :to="{name:'Details',params:{id:item.id}}"><img :src="item.images.small" :alt="item.alt"></router-link>
+      <router-link :to="{name:'Details',params:{id:item.id}}"><img :src="item.images.large" :alt="item.alt"></router-link>
       <p>{{ item.title }}</p>
       <p class="smallFont">评分：{{ item.rating.average }}分</p>
     </li>
@@ -15,28 +15,42 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from 'vue';
+import jsonp from 'jsonp';  
 export default {
   name: 'Usbox',
   data(){
     return {
-      arrusbox:""
+      arrusbox:[]
     }
   }, 
   created(){
-    var url  = "../../static/us_box.json"
-    //var url = "https://api.douban.com/v2/movie/us_box"
-    Vue.axios.get(url).then((response) => {
-      // console.log(response.data.subjects)
-      return response.data.subjects;
-    }).then((data)=>{
-      var arr = Array.prototype.slice.call(data);
-      var newArr = []
-      for(var i=0, len=arr.length; i<8; i++){
-        newArr.push(arr[i].subject);
+    // var url  = "../../static/us_box.json"
+    // //var url = "https://api.douban.com/v2/movie/us_box"
+    // Vue.axios.get(url).then((response) => {
+    //   // console.log(response.data.subjects)
+    //   return response.data.subjects;
+    // }).then((data)=>{
+    //   var arr = Array.prototype.slice.call(data);
+    //   var newArr = []
+    //   for(var i=0, len=arr.length; i<8; i++){
+    //     newArr.push(arr[i].subject);
+    //   }
+    //   this.arrusbox = newArr;
+    //   // console.log(this.arrusbox)
+    // })
+
+    // jsonp跨域
+    var url  = "https://api.douban.com/v2/movie/us_box"
+    jsonp(url,null,(err,data)=>{
+      if(err){
+        console.error(err.message);
+      }else{
+       // 取前8条数据
+       for(var i=0; i<8; i++){
+         this.arrusbox.push(data.subjects[i].subject)
+       } 
       }
-      this.arrusbox = newArr;
-      // console.log(this.arrusbox)
     })
   }
 }
@@ -79,8 +93,9 @@ export default {
   text-align: center;
   padding-bottom: 0.2rem;
 }
-#usbox>ul>li>img{
-
+#usbox>ul>li img{
+  width: 1.3rem;
+  height: 2rem;
 }
 #usbox>ul>li>p{
   width: 100%;

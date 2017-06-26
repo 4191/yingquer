@@ -39,34 +39,41 @@ export default {
     }
   },
   created(){
-  	var url = "../../static/"+this.$route.params.woxiang+".json";
-   // jsonp(url,null,(err,data)=>{
-   //    if(err){
-   //      console.error(err.message);
-   //    }else{
-   //     console.log(data)
-   //     this.woxiang = data;
-   //     //console.log(this.obj)		
-   //    }
-   //  })
-    Vue.axios.get(url).then((res)=>{
-      //console.log(res.data) 
-      return res.data
-    }).then((data)=>{
-      if(this.$route.params.woxiang == "us_box"){
-      	for(var i=0,len=data.subjects.length;i<len;i++){
-      		this.woxiang.push(data.subjects[i].subject)
-      	}
-      	// alert(this.$route.params.woxiang)
-      	// console.log(this.woxiang)
+  	var url = "https://api.douban.com/v2/movie/"+this.$route.params.woxiang;
+   jsonp(url,null,(err,data)=>{
+      if(err){
+        console.error(err.message);
       }else{
-	      this.woxiang = data.subjects;
+       console.log(data)
+       this.woxiang = data;
+       if(this.$route.params.woxiang == "us_box"){
+	      	for(var i=0,len=data.subjects.length;i<len;i++){
+	      		this.woxiang.push(data.subjects[i].subject)
+	      	}
+	      }else{
+		      this.woxiang = data.subjects;
+	      }
+	      for(var i=0,len=this.woxiang.length;i<len;i++){
+	      	this.list.push(this.woxiang[i])
+	      }	
       }
-      for(var i=0,len=this.woxiang.length;i<len;i++){
-      	this.list.push(this.woxiang[i])
-      }
-      // console.log(this.list)
     })
+   	// 调mock数据
+  	// var url = "../../static/"+this.$route.params.woxiang+".json";
+    // Vue.axios.get(url).then((res)=>{
+    //   return res.data
+    // }).then((data)=>{
+    //   if(this.$route.params.woxiang == "us_box"){
+    //   	for(var i=0,len=data.subjects.length;i<len;i++){
+    //   		this.woxiang.push(data.subjects[i].subject)
+    //   	}
+    //   }else{
+	   //    this.woxiang = data.subjects;
+    //   }
+    //   for(var i=0,len=this.woxiang.length;i<len;i++){
+    //   	this.list.push(this.woxiang[i])
+    //   }
+    // })
   },
   methods:{	
 	// loadMore(){

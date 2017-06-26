@@ -1,7 +1,7 @@
 <template>
   <div id="Dbox01">
       <div class="left">
-        <img v-if="passData.images!=null" :src="passData.images.medium">
+        <img v-if="passData.images!=null" :src="passData.images.large">
       </div>
       <div class="right">
         <p>{{passData.title}}</p>
@@ -31,7 +31,7 @@ export default {
   justify-content: space-between;
   background: #dcdcdc;
 }
-#Dbox01 #left img{
+#Dbox01 .left img{
   height: 3rem;
   width: 2rem;
 }

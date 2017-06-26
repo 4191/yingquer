@@ -38,21 +38,20 @@ export default {
   	}
   },
   created(){
-		var api  = "../../static/in_theaters.json"
-		Vue.axios.get(api).then((response) => {
-		  this.arrth = Array.prototype.slice.call(response.data.subjects);
-		})
+		// var api  = "../../static/in_theaters.json"
+		// Vue.axios.get(api).then((response) => {
+		//   this.arrth = Array.prototype.slice.call(response.data.subjects);
+		// })
 
 		// 跨域方式
-		// var url = "https://api.doubai.com/v2/movie/in_theaters";
-		// jsonp(url,null,(err,data)=>{
-		// 	if(err){
-		// 	  console.error(err.message);
-		// 	}else{
-		// 	  console.log(data.subjects);
-		// 	  this.arrth = data.subjects;
-		// 	}
-		// })
+		var url = "https://api.douban.com/v2/movie/in_theaters";
+		jsonp(url,null,(err,data)=>{
+			if(err){
+			  console.error(err.message);
+			}else{
+			  this.arrth = data.subjects;
+			}
+		})
 	},
 
 }

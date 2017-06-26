@@ -6,7 +6,7 @@
   </div>
   <ul>
     <li v-for="item in arrcoming">
-      <router-link :to="{name:'Details', params:{id:item.id}}"><img :src="item.images.small" :alt="item.alt"></router-link> 
+      <router-link :to="{name:'Details', params:{id:item.id}}"><img :src="item.images.large" :alt="item.alt"></router-link> 
       <p>{{ item.title }}</p>
       <!-- 未上映模块，没有评分 -->
       <p class="smallFont">暂无评分</p>
@@ -16,28 +16,41 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from 'vue';
+import jsonp from 'jsonp';
 export default {
   name: 'Coming',
   data(){
     return {
-      arrcoming:""
+      arrcoming:[]
     }
   }, 
   created(){
-    var url  = "../../static/coming_soon.json"
-    Vue.axios.get(url).then((response) => {
-      // console.log(response.data.subjects)
-      return response.data.subjects;
-    }).then((data)=>{
-      var arr = Array.prototype.slice.call(data);
-      var newArr = []
-      for(var i=0, len=arr.length; i<8; i++){
-        newArr.push(arr[i]);
-      }
+    // var url  = "../../static/coming_soon.json"
+    // Vue.axios.get(url).then((response) => {
+    //   return response.data.subjects;
+    // }).then((data)=>{
+    //   var arr = Array.prototype.slice.call(data);
+    //   var newArr = []
+    //   for(var i=0, len=arr.length; i<8; i++){
+    //     newArr.push(arr[i]);
+    //   }
+    //   this.arrcoming = newArr;
+    // })
 
-      this.arrcoming = newArr;
-      // console.log(this.arrcoming)
+    // jsonp跨域
+    var url  = "https://api.douban.com/v2/movie/coming_soon"
+    jsonp(url,null,(err,data)=>{
+      if(err){
+        console.error(err.message);
+      }else{
+       // 取前8条数据
+       for(var i=0; i<8; i++){
+         this.arrcoming.push(data.subjects[i])
+       }
+       // this.arrcoming = data.subjects;
+       //console.log(this.obj)   
+      }
     })
   }
 }
@@ -80,6 +93,10 @@ export default {
   width: 25%;
   text-align: center;
   padding-bottom: 0.2rem;
+}
+#coming>ul>li img{
+  width: 1.3rem;
+  height: 2rem;
 }
 #coming>ul>li>p{
   width: 100%;
